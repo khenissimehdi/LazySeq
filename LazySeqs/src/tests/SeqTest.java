@@ -319,7 +319,7 @@ public class SeqTest {
     var seq = Seq.of().map(__ -> fail(""));
     seq.forEach(__ -> fail(""));
   }
- /*
+
 
   // Q6
 
@@ -440,7 +440,7 @@ public class SeqTest {
     assertFalse(it.hasNext());
   }
 
-
+ /*
   // Q8
 
   @Test @Tag("Q8")
