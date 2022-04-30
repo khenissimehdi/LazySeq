@@ -440,7 +440,7 @@ public class SeqTest {
     assertFalse(it.hasNext());
   }
 
- /*
+
   // Q8
 
   @Test @Tag("Q8")
@@ -546,5 +546,5 @@ public class SeqTest {
     var newSpliterator = spliterator.trySplit();
     assertNotNull(newSpliterator);
     assertEquals(42, StreamSupport.stream(newSpliterator,false).findFirst().orElseThrow());
-  }*/
+  }
 }

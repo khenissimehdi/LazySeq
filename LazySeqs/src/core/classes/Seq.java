@@ -3,8 +3,8 @@ package core.classes;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
-
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class Seq <T> implements Iterable<T>{
     private final List<?> seq;
@@ -50,6 +50,50 @@ public class Seq <T> implements Iterable<T>{
     @Override
     public Iterator<T> iterator() {
         return seq.stream().map(mapper).iterator();
+    }
+
+    public Spliterator<T> spliterator(int start, int end, List<?> seq) {
+        return new Spliterator<>() {
+            private int i  = start;
+            @Override
+            public boolean tryAdvance(Consumer<? super T> action) {
+                Objects.requireNonNull(action);
+               if(i == end) {
+                   return false;
+               }
+
+               action.accept(mapper.apply(seq.get(i++)));
+               return true;
+            }
+
+            @Override
+            public Spliterator<T> trySplit() {
+               var mid =(i + end) >>> 1;
+               if(mid == i) {
+                   return null;
+               }
+
+               var split = spliterator(i,mid,seq);
+               i = mid;
+
+               return split;
+            }
+
+            @Override
+            public long estimateSize() {
+
+                return end - i;
+            }
+
+            @Override
+            public int characteristics() {
+                return ORDERED | IMMUTABLE | NONNULL | SIZED ;
+            }
+        };
+    }
+
+    public Stream<T> stream() {
+        return StreamSupport.stream(spliterator(0, size, seq),false);
     }
 
     public void forEach(Consumer<? super T> consumer) {
