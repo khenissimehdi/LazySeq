@@ -57,7 +57,7 @@ public class SeqTest {
   }
   @Test @Tag("Q1")
   public void testFromSize() {
-    var seq = Seq.from(List.of("78", "56", "34", "23"));
+    var  seq = Seq.from(List.of("78", "56", "34", "23"));
     assertEquals(4, seq.size());
   }
   @Test @Tag("Q1")
@@ -91,9 +91,15 @@ public class SeqTest {
   }
   @Test @Tag("Q1")
   public void testFromSignature() {
-    var list = List.of(76, 87);
-    Seq<Object> seq = Seq.from(list);  // this should compile
+    var list = List.of("d", "87");
+    // to be able to cast a Seq<CharSeq> as Seq<String> the elements that are going inside the Seq.from
+    // needs a type that is at least String or less there for you have to use ? extends T
+    // otherwise you will be putting elements that are bigger than a string
+    // , and you will be able to say that Seq<CharSeq> is the same as Seq<String> because you will be saying that
+    // a string or some type that is bigger than string is bigger than a CharSequence
+    Seq<CharSequence> seq = Seq.from(list); ;// this should compile
     assertNotNull(seq);
+
   }
   @Test @Tag("Q1")
   public void testFieldsAreFinal() {
