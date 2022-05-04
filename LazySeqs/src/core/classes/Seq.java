@@ -96,7 +96,7 @@ public class Seq <T> implements Iterable<T>{
      * @param end int
      * @param seq List<?>
      * */
-    private Spliterator<T> spliterator(int start, int end, List<?> seq) {
+    private Spliterator<T> spliterator(int start, int end, T[] seq) {
         return new Spliterator<>() {
             private int i  = start;
             @Override
@@ -105,7 +105,7 @@ public class Seq <T> implements Iterable<T>{
                if(i == end) {
                    return false;
                }
-               action.accept(mapper.apply(seq.get(i++)));
+               action.accept(mapper.apply(seq[i++]));
                return true;
             }
 
@@ -154,7 +154,7 @@ public class Seq <T> implements Iterable<T>{
      * @return Stream<T>
      * */
     public Stream<T> stream() {
-        return StreamSupport.stream(spliterator(0, size,Arrays.asList(seq)),false);
+        return StreamSupport.stream(spliterator(0, size,seq),false);
     }
 
 
