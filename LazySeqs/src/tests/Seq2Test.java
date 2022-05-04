@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("static-method")
-public class SeqTest {
+public class Seq2Test {
   // Q1
 
   @Test @Tag("Q1")
@@ -57,7 +57,7 @@ public class SeqTest {
   }
   @Test @Tag("Q1")
   public void testFromSize() {
-    var  seq = Seq.from(List.of("78", "56", "34", "23"));
+    var seq = Seq.from(List.of("78", "56", "34", "23"));
     assertEquals(4, seq.size());
   }
   @Test @Tag("Q1")
@@ -91,15 +91,9 @@ public class SeqTest {
   }
   @Test @Tag("Q1")
   public void testFromSignature() {
-    var list = List.of("d", "87");
-    // to be able to cast a Seq<CharSeq> as Seq<String> the elements that are going inside the Seq.from
-    // needs a type that is at least String or less there for you have to use ? extends T
-    // otherwise you will be putting elements that are bigger than a string
-    // , and you will be able to say that Seq<CharSeq> is the same as Seq<String> because you will be saying that
-    // a string or some type that is bigger than string is bigger than a CharSequence
-    Seq<CharSequence> seq = Seq.from(list); ;// this should compile
+    var list = List.of(76, 87);
+    Seq<Object> seq = Seq.from(list);  // this should compile
     assertNotNull(seq);
-
   }
   @Test @Tag("Q1")
   public void testFieldsAreFinal() {
@@ -222,10 +216,10 @@ public class SeqTest {
   @Test @Tag("Q5")
   public void testMapSimple() {
     Seq<String> seq = Seq.of("1", "2");
-    Seq<Integer> seq2 = seq.map(Integer::parseInt);
+    Seq<Integer> Seq = seq.map(Integer::parseInt);
 
     ArrayList<Integer> list = new ArrayList<>();
-    seq2.forEach(list::add);
+    Seq.forEach(list::add);
     assertEquals(List.of(1, 2), list);
   }
   @Test @Tag("Q5")
@@ -237,28 +231,28 @@ public class SeqTest {
   public void testMapSignature1() {
     var seq = Seq.of(11, 75);
     UnaryOperator<Object> identity = x -> x;
-    Seq<Object> seq2 = seq.map(identity);
+    Seq<Object> Seq = seq.map(identity);
     var list = new ArrayList<>();
-    seq2.forEach(list::add);
+    Seq.forEach(list::add);
     assertEquals(List.of(11, 75), list);
   }
   @Test @Tag("Q5")
   public void testMapSignature2() {
     var seq = Seq.of("foo", "bar");
     UnaryOperator<String> identity = x -> x;
-    Seq<Object> seq2 = seq.map(identity);
+    Seq<Object> Seq = seq.map(identity);
     var list = new ArrayList<>();
-    seq2.forEach(list::add);
+    Seq.forEach(list::add);
     assertEquals(List.of("foo", "bar"), list);
   }
   @Test @Tag("Q5")
   public void testMapGet() {
     var seq = Seq.of(101, 201, 301);
-    var seq2 = seq.map(x -> 2 * x);
+    var Seq = seq.map(x -> 2 * x);
     assertAll(
-        () -> assertEquals((Integer)202, seq2.get(0)),
-        () -> assertEquals((Integer)402, seq2.get(1)),
-        () -> assertEquals((Integer)602, seq2.get(2))
+        () -> assertEquals((Integer)202, Seq.get(0)),
+        () -> assertEquals((Integer)402, Seq.get(1)),
+        () -> assertEquals((Integer)602, Seq.get(2))
     );
   }
   @Test @Tag("Q5")
@@ -278,15 +272,15 @@ public class SeqTest {
   @Test @Tag("Q5")
   public void testMapNotCalledForSize() {
     var seq = Seq.of(42, 777);
-    var seq2 = seq.map(x -> { fail("should not be called"); return null; });
+    var Seq = seq.map(x -> { fail("should not be called"); return null; });
 
-    assertEquals(2, seq2.size());
+    assertEquals(2, Seq.size());
   }
   @Test @Tag("Q5")
   public void testMapShouldNotBeCalledForSize() {
     var seq = Seq.of(42, 777);
-    var seq2 = seq.map(x -> { fail("should not be called"); return null; });
-    var seq3 = seq2.map(x -> { fail("should not be called"); return null; });
+    var Seq = seq.map(x -> { fail("should not be called"); return null; });
+    var seq3 = Seq.map(x -> { fail("should not be called"); return null; });
 
     assertEquals(2, seq3.size());
   }
@@ -304,17 +298,17 @@ public class SeqTest {
   @Test @Tag("Q5")
   public void testMapForEach() {
     var seq = Seq.of("1", "2", "3");
-    var seq2 = seq.map(Integer::parseInt);
+    var Seq = seq.map(Integer::parseInt);
 
     var list = new ArrayList<Integer>();
-    seq2.forEach(list::add);
+    Seq.forEach(list::add);
     assertEquals(List.of(1, 2, 3), list);
   }
   @Test @Tag("Q5")
   public void testMapForEachCompose() {
     var seq = Seq.of("1", "2", "3");
-    var seq2 = seq.map(Integer::parseInt);
-    var seq3 = seq2.map(String::valueOf);
+    var Seq = seq.map(Integer::parseInt);
+    var seq3 = Seq.map(String::valueOf);
 
     var list = new ArrayList<String>();
     seq3.forEach(list::add);
@@ -346,17 +340,18 @@ public class SeqTest {
   @Test @Tag("Q6")
   public void testFirstMap() {
     var seq1 = Seq.of("1", "3").map(s -> s.concat(" zorg"));
-    var seq2 = Seq.of().map(s -> s + " zorg");
+    var Se = Seq.of().map(s -> s + " zorg");
+
     assertAll(
         () -> assertEquals("1 zorg", seq1.findFirst().orElseThrow()),
-        () -> assertTrue(seq2.findFirst().isEmpty())
+        () -> assertTrue(Se.findFirst().isEmpty())
     );
   }
   @Test @Tag("Q6")
   public void testFirstMapCompose() {
     var seq1 = Seq.of("1", "3", "2");
-    var seq2 = seq1.map(Integer::parseInt);
-    var seq3 = seq2.map(String::valueOf);
+    var Seq = seq1.map(Integer::parseInt);
+    var seq3 = Seq.map(String::valueOf);
     assertEquals("1", seq3.findFirst().orElseThrow());
   }
   @Test @Tag("Q6")
@@ -488,6 +483,30 @@ public class SeqTest {
     assertEquals(list, stream.collect(toUnmodifiableList()));
   }
   @Test @Tag("Q8")
+  public void testStreamSpliteratorSplitable() {
+    var list = range(0, 1_000_000).boxed().collect(toUnmodifiableList());
+    var spliterator = Seq.from(list).stream().spliterator();
+    assertNotNull(spliterator.trySplit());
+  }
+  @Test @Tag("Q8")
+  public void testStreamSpliteratorSplitableAndFair() {
+    var list = range(0, 1_000_000).boxed().collect(toUnmodifiableList());
+    var spliterator = Seq.from(list).stream().spliterator();
+    var spliterator2 = spliterator.trySplit();
+    assertNotNull(spliterator2);
+    assertEquals(1_000_000 / 2, spliterator.estimateSize());
+    assertEquals(1_000_000 / 2, spliterator2.estimateSize());
+  }
+  @Test @Tag("Q8")
+  public void testStreamSpliteratorSplitableWithMap() {
+    var list = range(0, 1_000_000).boxed().collect(toUnmodifiableList());
+    var spliterator = Seq.from(list).map(x->42).stream().spliterator();
+    var newSpliterator = spliterator.trySplit();
+    assertNotNull(newSpliterator);
+    assertEquals(42, StreamSupport.stream(newSpliterator,false).findFirst().orElseThrow());
+
+  }
+  @Test @Tag("Q8")
   public void testStreamSpliteratorCharacteristic() {
     var spliterator = Seq.of("foo").stream().spliterator();
     assertTrue(spliterator.hasCharacteristics(Spliterator.IMMUTABLE));
@@ -511,46 +530,19 @@ public class SeqTest {
   @Test @Tag("Q8")
   public void testMapStream() {
     var seq1 = Seq.of("1", "3").map(s -> s.concat(" fizz"));
-    var seq2 = seq1.map(s -> s + " buzz");
+    var Seq = seq1.map(s -> s + " buzz");
     assertAll(
         () -> assertEquals("1 fizz - 3 fizz",seq1.stream().collect(Collectors.joining(" - "))),
-        () -> assertEquals("1 fizz buzz - 3 fizz buzz",seq2.stream().collect(Collectors.joining(" - ")))
+        () -> assertEquals("1 fizz buzz - 3 fizz buzz",Seq.stream().collect(Collectors.joining(" - ")))
     );
   }
   @Test @Tag("Q8")
   public void testFirstMapStream() {
     var seq1 = Seq.of("1", "3").map(s -> s.concat(" zorg"));
-    var seq2 = Seq.of().map(s -> s + " zorg");
+    var Se = Seq.of().map(s -> s + " zorg");
     assertAll(
         () -> assertEquals(seq1.stream().findFirst().orElseThrow(), seq1.findFirst().orElseThrow()),
-        () -> assertTrue(seq2.findFirst().isEmpty())
+        () -> assertTrue(Se.findFirst().isEmpty())
     );
-  }
-
-
-  // Q9
-
-  @Test @Tag("Q9")
-  public void testStreamSpliteratorSplitable() {
-    var list = range(0, 1_000_000).boxed().collect(toUnmodifiableList());
-    var spliterator = Seq.from(list).stream().spliterator();
-    assertNotNull(spliterator.trySplit());
-  }
-  @Test @Tag("Q9")
-  public void testStreamSpliteratorSplitableAndFair() {
-    var list = range(0, 1_000_000).boxed().collect(toUnmodifiableList());
-    var spliterator = Seq.from(list).stream().spliterator();
-    var spliterator2 = spliterator.trySplit();
-    assertNotNull(spliterator2);
-    assertEquals(1_000_000 / 2, spliterator.estimateSize());
-    assertEquals(1_000_000 / 2, spliterator2.estimateSize());
-  }
-  @Test @Tag("Q9")
-  public void testStreamSpliteratorSplitableWithMap() {
-    var list = range(0, 1_000_000).boxed().collect(toUnmodifiableList());
-    var spliterator = Seq.from(list).map(x->42).stream().spliterator();
-    var newSpliterator = spliterator.trySplit();
-    assertNotNull(newSpliterator);
-    assertEquals(42, StreamSupport.stream(newSpliterator,false).findFirst().orElseThrow());
   }
 }

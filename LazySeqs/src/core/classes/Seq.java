@@ -7,13 +7,13 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class Seq <T> implements Iterable<T>{
-    private final List<?> seq;
+    private final T[] seq;
     private final int size;
     private final Function<Object, T> mapper;
 
-    public Seq(List<?> seq, Function<Object, T> mapper) {
+    public Seq(T[] seq, Function<Object, T> mapper) {
         this.seq = seq;
-        this.size = seq.size();
+        this.size = seq.length;
         this.mapper = mapper;
     }
     /**
@@ -24,8 +24,7 @@ public class Seq <T> implements Iterable<T>{
     @SuppressWarnings("unchecked")
     public static <v> Seq<v> from(Collection<? extends v> list) {
         Objects.requireNonNull(list);
-
-        return new Seq<>(List.copyOf(list),i->(v)i);
+        return new Seq<>((v[]) List.copyOf(list).toArray(),i->(v)i);
     }
 
     /**
@@ -37,7 +36,7 @@ public class Seq <T> implements Iterable<T>{
     public static <v> Seq<v> of(v ...values) {
         Objects.requireNonNull(values);
         @SuppressWarnings("unchecked")
-        var seq = new Seq<>(List.of(values), i->(v)i);
+        var seq = new Seq<>((v[])List.of(values).toArray(), i->(v)i);
         return seq;
     }
 
@@ -46,7 +45,7 @@ public class Seq <T> implements Iterable<T>{
      * @param i int
      * @return T
      * */
-    public T get(int i) {return mapper.apply(seq.get(i));}
+    public T get(int i) {return mapper.apply(seq[i]);}
 
 
     /**
@@ -67,7 +66,7 @@ public class Seq <T> implements Iterable<T>{
         if(size == 0){
           return Optional.empty();
         }
-        return Optional.of(mapper.apply(seq.get(0)));
+        return Optional.of(mapper.apply(seq[0]));
     }
 
     /**
@@ -76,11 +75,11 @@ public class Seq <T> implements Iterable<T>{
      * @param function Function<? super T, ? extends W>
      * @return Seq<W>
      * */
+    @SuppressWarnings("unchecked")
     public <W> Seq<W> map(Function<? super T, ? extends W> function){
         Objects.requireNonNull(function);
-        return new Seq<>(seq, mapper.andThen(function));
+        return new Seq<>((W[])seq, mapper.andThen(function));
     }
-
 
     /**
      * return ann iterator of the lazySeq
@@ -88,9 +87,8 @@ public class Seq <T> implements Iterable<T>{
      * */
     @Override
     public Iterator<T> iterator() {
-        return seq.stream().map(mapper).iterator();
+        return  Arrays.stream(seq).map(mapper).iterator();
     }
-
 
     /**
      * returns spliterator of the lazySeq
@@ -156,7 +154,7 @@ public class Seq <T> implements Iterable<T>{
      * @return Stream<T>
      * */
     public Stream<T> stream() {
-        return StreamSupport.stream(spliterator(0, size, seq),false);
+        return StreamSupport.stream(spliterator(0, size,Arrays.asList(seq)),false);
     }
 
 
